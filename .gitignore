@@ -1,0 +1,40 @@
+# Ignorar logs y archivos del sistema
+*.log
+.DS_Store
+Thumbs.db
+
+# Archivos de entorno
+src/.env
+src/.env.backup
+src/.env.production
+
+# Archivos de configuración locales
+src/.phpactor.json
+src/.phpunit.result.cache
+src/.phpunit.cache
+/.fleet
+/.idea
+/.nova
+/.vscode
+/.zed
+src/auth.json
+
+# Node modules y dependencias front
+src/node_modules
+src/public/build
+src/public/hot
+
+# Almacenamiento público y privado
+src/public/storage
+src/storage/*.key
+src/storage/pail
+
+# Dependencias de PHP
+src/vendor
+
+# Archivos de Homestead
+src/Homestead.json
+src/Homestead.yaml
+
+# Volumen de datos MySQL (Docker)
+mysql_data/
