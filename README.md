@@ -45,3 +45,8 @@ docker compose run --rm artisan key:generate
 docker compose run --rm artisan migrate
 
 ```
+---
+### 4. Tareas progrmadas
+```bash
+docker compose run --rm artisan sanctum:prune-expired --hours=24
+```
