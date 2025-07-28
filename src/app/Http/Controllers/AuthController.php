@@ -25,9 +25,10 @@ class AuthController extends Controller
             $user = User::create($data);
 
             #Generar token 
-            $token = $user->createToken($request->name);
+            $token = $user->createToken($request->email);
             $info = [
-                'user' => $user,
+                'message'=>'El usuario se a creado correctamente',
+                'data' => $user,
                 'token' => $token,
             ];
 
@@ -49,8 +50,9 @@ class AuthController extends Controller
             ], 401);
         }
 
-        $token = $user->createToken($user->name);
+        $token = $user->createToken($user->email);
         $data = [
+            'message'=>'Has iniciado sesion correcta mente',
             'user' => $user,
             'token' => $token->plainTextToken
         ];
@@ -61,7 +63,7 @@ class AuthController extends Controller
     {
         $request->user()->tokens()->delete();
         return response()->json([
-            'message' => 'Estas fuera'
+            'message' => 'Vuelva pronto'
         ], 200);
     }
 }
