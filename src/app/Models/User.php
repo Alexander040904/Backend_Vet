@@ -22,6 +22,8 @@ class User extends Authenticatable
         'role_id'
     ];
 
-  
-  
+    public function vet()
+    {
+        return $this->hasOne(Vet::class);
+    }
 }
