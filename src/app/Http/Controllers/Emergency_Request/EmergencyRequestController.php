@@ -16,6 +16,10 @@ class EmergencyRequestController extends Controller
     public function store(StoreRequest $request): JsonResponse
     {
         $user = $request->user();
+
+        if ($user->role_id !== 2) {
+            return response()->json(['message' => 'No autorizado'], 403);
+        }
         $data = $request->validated();
         $data['client_id'] = $user->id;
         $emergency = EmergencyRequest::create($data);
@@ -33,7 +37,7 @@ class EmergencyRequestController extends Controller
         $user = $request->user();
 
         // Opcional: Validar rol
-        if ($user->role_id !== 2) {
+        if ($user->role_id == 2) {
             return response()->json(['message' => 'No autorizado'], 403);
         }
 
@@ -46,22 +50,31 @@ class EmergencyRequestController extends Controller
         ]);
     }
 
-    public function myRequest(Request $request): JsonResponse{
+    public function myRequest(Request $request)
+    {
         $user = $request->user();
 
         if ($user->role_id == 2) {
             // Veterinario: solicitudes asignadas a él
-            $data = EmergencyRequest::where('assigned_vet_id', $user->id)->get();
+            $data = $user->emergencyRequestsCreated;
+
+
+              return response()->json([
+            'menssage' => 'Solicitud optenida correcta mente',
+            'data' => $data,
+            'id' => $user->id
+        ]);
         } elseif ($user->role_id == 1) {
             // Cliente: solicitudes que él creó
-            $data = EmergencyRequest::where('client_id', $user->id)->get();
+            $data = $user->emergencyRequestsAssigned;
+              return response()->json([
+            'menssage' => 'Solicitud optenida correcta mente',
+            'data' => $data,
+            'id' => $user->id
+        ]);
         }
 
-        return response()->json([
-            'menssage' => 'Solicitud optenida correcta mente',
-            'data' => $data
-        ]);
 
-
+      
     }
 }
