@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Emergency_Request;
 
+use App\Events\EmergencyRequestCreatedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EmergencyRequest\StoreRequest;
 use App\Models\EmergencyRequest;
@@ -24,11 +25,14 @@ class EmergencyRequestController extends Controller
         $data['client_id'] = $user->id;
         $emergency = EmergencyRequest::create($data);
 
-
+        EmergencyRequestCreatedEvent::dispatch($emergency);
         return response()->json([
             'message' => 'Emergencia creada',
             'data' => $emergency
         ]);
+
+       
+
     }
 
 
