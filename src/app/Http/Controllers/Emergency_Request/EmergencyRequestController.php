@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Emergency_Request;
 
+use App\Events\EmergencyRequestCreatedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EmergencyRequest\StoreRequest;
 use App\Models\EmergencyRequest;
@@ -24,7 +25,7 @@ class EmergencyRequestController extends Controller
         $data['client_id'] = $user->id;
         $emergency = EmergencyRequest::create($data);
 
-
+        EmergencyRequestCreatedEvent::dispatch($emergency);
         return response()->json([
             'message' => 'Emergencia creada',
             'data' => $emergency
@@ -50,31 +51,22 @@ class EmergencyRequestController extends Controller
         ]);
     }
 
-    public function myRequest(Request $request)
+    public function myRequest(Request $request): JsonResponse
     {
         $user = $request->user();
 
         if ($user->role_id == 2) {
             // Veterinario: solicitudes asignadas a él
             $data = $user->emergencyRequestsCreated;
-
-
-              return response()->json([
-            'menssage' => 'Solicitud optenida correcta mente',
-            'data' => $data,
-            'id' => $user->id
-        ]);
         } elseif ($user->role_id == 1) {
             // Cliente: solicitudes que él creó
             $data = $user->emergencyRequestsAssigned;
-              return response()->json([
+        }
+
+        return response()->json([
             'menssage' => 'Solicitud optenida correcta mente',
             'data' => $data,
             'id' => $user->id
         ]);
-        }
-
-
-      
     }
 }

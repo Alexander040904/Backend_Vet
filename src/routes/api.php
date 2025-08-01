@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Emergency_Request\EmergencyRequestController;
+use App\Http\Controllers\Notification\NotificationController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Vet\VetController;
 use Illuminate\Http\Request;
@@ -41,4 +42,17 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/{id}', [EmergencyRequestController::class, 'update']);
         Route::get('/my', [EmergencyRequestController::class, 'myRequest']);
     });
+    
+
+    Route::prefix('notifications')->controller(NotificationController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::get('/unread', 'unread');
+    Route::post('/{id}/read', 'markAsRead');
+    Route::post('/read-all', 'markAllAsRead');
+    Route::delete('/all', 'allDestroy');
+    Route::delete('/{id}', 'destroy');
+   
+
+});
+
 });
