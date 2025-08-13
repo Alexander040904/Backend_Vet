@@ -22,6 +22,7 @@ class EmergencyRequestController extends Controller
             return response()->json(['message' => 'No autorizado'], 403);
         }
         $data = $request->validated();
+        
         $data['client_id'] = $user->id;
         $emergency = EmergencyRequest::create($data);
 

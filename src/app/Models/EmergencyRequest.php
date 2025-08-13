@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use PhpParser\Node\Expr\Cast\String_;
 
 class EmergencyRequest extends Model
 {
@@ -16,11 +17,9 @@ class EmergencyRequest extends Model
         'description',
     ];
 
-       protected $casts = [
-        'status' => 'boolean',
-    ];
+       
 
-    public function activar(int $assigned_vet_id, bool $status = true)
+    public function activar(int $assigned_vet_id, string $status = 'accepted')
     {
         $this->status = $status;
         $this->assigned_vet_id = $assigned_vet_id;

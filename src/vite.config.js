@@ -10,4 +10,12 @@ export default defineConfig({
         }),
         tailwindcss(),
     ],
+     server: {  
+        cors: {  
+            origin: [  
+                'http://localhost:5173/',  
+                 
+            ],  
+        },  
+    }
 });

@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('weight');
             $table->string('symptoms');
             $table->string('description');
-            $table->boolean('status')->default(false);
+            $table->string('status')->default('pending');
 
             $table->timestamp('sent_at')->useCurrent();
             $table->timestamps();
