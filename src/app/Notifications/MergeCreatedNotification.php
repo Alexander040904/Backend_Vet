@@ -37,11 +37,7 @@ class MergeCreatedNotification extends Notification  implements ShouldBroadcast
 
     public function toDatabase(object $notifiable): array
     {
-        return [
-            'id'      => $this->emergency->id,
-            'message' => 'The ' . $this->emergency->species . ' have ' . $this->emergency->symptoms,
-            'type'    => 'emergency',
-        ];
+        return $this->emergency->toArray();
     }
 
     public function toBroadcast(object $notifiable): BroadcastMessage

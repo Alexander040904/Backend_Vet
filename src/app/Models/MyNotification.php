@@ -8,5 +8,5 @@ use Illuminate\Notifications\DatabaseNotification;
 class MyNotification extends DatabaseNotification
 {
     //
-    protected $visible = ['id', 'data', 'read_at', 'notifiable_id'];
+    protected $visible = ['id', 'data', 'read_at', 'notifiable_id', 'created_at', 'updated_at'];
 }
