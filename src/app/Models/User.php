@@ -30,7 +30,7 @@ class User extends Authenticatable
     {
         return $this->hasOne(Vet::class);
     }
-       // Emergencias creadas por el usuario (cliente)
+    // Emergencias creadas por el usuario (cliente)
     public function emergencyRequestsCreated()
     {
         return $this->hasMany(EmergencyRequest::class, 'client_id');
@@ -40,5 +40,10 @@ class User extends Authenticatable
     public function emergencyRequestsAssigned()
     {
         return $this->hasMany(EmergencyRequest::class, 'assigned_vet_id');
+    }
+    public function notifications()
+    {
+        return $this->morphMany(MyNotification::class, 'notifiable')
+            ->orderBy('created_at', 'desc');
     }
 }
