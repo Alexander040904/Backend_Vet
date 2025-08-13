@@ -22,6 +22,10 @@ class User extends Authenticatable
         'role_id'
     ];
 
+    protected $hidden = [
+        'password'
+    ];
+
     public function vet()
     {
         return $this->hasOne(Vet::class);

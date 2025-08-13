@@ -4,11 +4,13 @@ namespace App\Notifications;
 
 use App\Models\EmergencyRequest;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class MergeCreatedNotification extends Notification
+class MergeCreatedNotification extends Notification  implements ShouldBroadcast
 {
     use Queueable;
 
@@ -17,7 +19,7 @@ class MergeCreatedNotification extends Notification
      */
     public $emergency;
 
-     public function __construct(EmergencyRequest $emergency)
+    public function __construct(EmergencyRequest $emergency)
     {
         $this->emergency = $emergency;
     }
@@ -29,27 +31,39 @@ class MergeCreatedNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['database'];
-    }
-
-    /**
-     * Get the mail representation of the notification.
-     */
-    public function toMail(object $notifiable): MailMessage
-    {
-        return (new MailMessage)
-            ->line('The introduction to the notification.')
-            ->action('Notification Action', url('/'))
-            ->line('Thank you for using our application!');
+        // Se envía por database y broadcast
+        return ['database', 'broadcast'];
     }
 
     public function toDatabase(object $notifiable): array
     {
         return [
-            'id' => $this->emergency->id,
+            'id'      => $this->emergency->id,
             'message' => 'The ' . $this->emergency->species . ' have ' . $this->emergency->symptoms,
-            'type' => 'emergency',
+            'type'    => 'emergency',
         ];
+    }
+
+    public function toBroadcast(object $notifiable): BroadcastMessage
+    {
+        return new BroadcastMessage([
+            'id'      => $this->emergency->id,
+            'message' => 'The ' . $this->emergency->species . ' have ' . $this->emergency->symptoms,
+            'type'    => 'emergency',
+        ]);
+    }
+
+    // Canal privado para admins
+    public function broadcastOn(): array
+    {
+        return [
+            new \Illuminate\Broadcasting\PrivateChannel('emergencies.admin')
+        ];
+    }
+
+    public function broadcastAs(): string
+    {
+        return 'EmergencyNotification';
     }
 
     /**
