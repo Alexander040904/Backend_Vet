@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Emergency_Request;
 use App\Events\EmergencyRequestCreatedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EmergencyRequest\StoreRequest;
+use App\Http\Resources\EmergencyRequestResource;
 use App\Models\EmergencyRequest;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -22,7 +23,7 @@ class EmergencyRequestController extends Controller
             return response()->json(['message' => 'No autorizado'], 403);
         }
         $data = $request->validated();
-        
+
         $data['client_id'] = $user->id;
         $emergency = EmergencyRequest::create($data);
 
@@ -58,15 +59,17 @@ class EmergencyRequestController extends Controller
 
         if ($user->role_id == 2) {
             // Veterinario: solicitudes asignadas a él
-            $data = $user->emergencyRequestsCreated;
+            $data = $user->emergencyRequestsCreated()->with(['client', 'assignedVet'])->get();
         } elseif ($user->role_id == 1) {
             // Cliente: solicitudes que él creó
-            $data = $user->emergencyRequestsAssigned;
+            $data = $user->emergencyRequestsAssigned()->with(['client', 'assignedVet'])->get();
+        } else {
+            $data = collect(); // vacío si otro rol
         }
 
         return response()->json([
             'menssage' => 'Solicitud optenida correcta mente',
-            'data' => $data,
+            'data' => EmergencyRequestResource::collection($data),
             'id' => $user->id
         ]);
     }
