@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Emergency_Request;
 
+use App\Events\EmergencyAcceptedEvent;
 use App\Events\EmergencyRequestCreatedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EmergencyRequest\StoreRequest;
@@ -45,8 +46,14 @@ class EmergencyRequestController extends Controller
         }
 
         $emergency = EmergencyRequest::findOrFail($id);
+        // Verificar si la solicitud ya está aceptada
+        if ($emergency->status === 'accepted') {
+            return response()->json(['message' => 'Solicitud ya asignada'], 400);
+        }
+
         $emergency->activar($user->id); // nombre correcto del método
 
+        EmergencyAcceptedEvent::dispatch($emergency);
         return response()->json([
             'message' => 'Solicitud aceptada',
             'data' => $emergency
