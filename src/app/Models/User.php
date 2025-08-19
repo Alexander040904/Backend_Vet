@@ -46,4 +46,20 @@ class User extends Authenticatable
         return $this->morphMany(MyNotification::class, 'notifiable')
             ->orderBy('created_at', 'desc');
     }
+
+    // Mensajes enviados por el usuario
+    public function message()
+    {
+        return $this->hasMany(Message::class, 'sender_id');
+    }
+
+    // Chats privados donde el usuario es cliente o veterinario
+    public function privateChatsAsClient()
+    {
+        return $this->hasMany(PrivateChat::class, 'client_id');
+    }
+    public function privateChatsAsVet()
+    {
+        return $this->hasMany(PrivateChat::class, 'vet_id');
+    }
 }
