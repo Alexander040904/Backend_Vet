@@ -66,10 +66,10 @@ class EmergencyRequestController extends Controller
 
         if ($user->role_id == 2) {
             // Veterinario: solicitudes asignadas a él
-            $data = $user->emergencyRequestsCreated()->with(['client', 'assignedVet'])->get();
+            $data = $user->emergencyRequestsCreated()->with(['client', 'assignedVet', 'privateChat'])->get();
         } elseif ($user->role_id == 1) {
             // Cliente: solicitudes que él creó
-            $data = $user->emergencyRequestsAssigned()->with(['client', 'assignedVet'])->get();
+            $data = $user->emergencyRequestsAssigned()->with(['client', 'assignedVet', 'privateChat'])->get();
         } else {
             $data = collect(); // vacío si otro rol
         }

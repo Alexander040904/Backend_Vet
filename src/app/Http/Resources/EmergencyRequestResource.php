@@ -26,9 +26,11 @@ class EmergencyRequestResource extends JsonResource
             'symptoms' => $this->symptoms,
             'description' => $this->description,
             'status' => $this->status,
+            'chat_id' => $this->privateChat ? $this->privateChat->id : null,
             'sent_at' => $this->sent_at,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+
         ];
     }
 }

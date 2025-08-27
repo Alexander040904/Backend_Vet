@@ -21,10 +21,10 @@ class PrivateChatController extends Controller
         ]));
     }
 
-    public function messages(Request $request, $id)
+    public function getMessages(Request $request, $id)
     {
         $chat = PrivateChat::findOrFail($id);
-        $messages = $chat->messages()->with('sender')->get();
+        $messages = $chat->messages()->orderBy('created_at', 'asc')->get();
 
         return response()->json([
             'message' => 'Mensajes obtenidos correctamente',

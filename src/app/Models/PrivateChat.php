@@ -26,6 +26,6 @@ class PrivateChat extends Model
     }
     public function messages()
     {
-        return $this->hasMany(Message::class);
+        return $this->hasMany(Message::class, 'private_chat_id');
     }
 }
