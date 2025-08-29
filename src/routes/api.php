@@ -67,9 +67,4 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('message')->controller(MessageController::class)->group(function () {
         Route::post('/', 'store');
     });
-
-    Route::prefix('chat')->controller((PrivateChatController::class))->group(function () {
-        Route::post('/', 'store');
-        Route::get('/{id}', 'getMessages');
-    });
 });

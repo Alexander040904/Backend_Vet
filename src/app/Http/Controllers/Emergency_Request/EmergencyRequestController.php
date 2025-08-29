@@ -75,7 +75,7 @@ class EmergencyRequestController extends Controller
         }
 
         return response()->json([
-            'menssage' => 'Solicitud optenida correcta mente',
+            'message' => 'Solicitud optenida correcta mente',
             'data' => EmergencyRequestResource::collection($data),
             'id' => $user->id
         ]);

@@ -11,8 +11,8 @@ Broadcast::channel('client.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
 });
 
-Broadcast::channel('chat.{chatId}', function ($user, $chatId) {
-    $chat = PrivateChat::find($chatId);
+Broadcast::channel('chat.{id}', function ($user, $id) {
+    $chat = PrivateChat::find($id);
 
     if (! $chat) {
         return false;
