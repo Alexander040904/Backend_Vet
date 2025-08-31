@@ -19,8 +19,13 @@ class MergeCreatedNotification extends Notification  implements ShouldBroadcast
      */
     public $emergency;
 
-    public function __construct(EmergencyRequest $emergency)
+    public int $userId;
+
+    public function __construct(EmergencyRequest $emergency, int $userId = 0)
     {
+        $this->userId = $userId;
+        // Se asigna la emergencia
+
         $this->emergency = $emergency;
     }
 
@@ -37,18 +42,14 @@ class MergeCreatedNotification extends Notification  implements ShouldBroadcast
 
     public function toDatabase(object $notifiable): array
     {
-        return [
-            'id'      => $this->emergency->id,
-            'message' => 'The ' . $this->emergency->species . ' have ' . $this->emergency->symptoms,
-            'type'    => 'emergency',
-        ];
+        return $this->emergency->toArray();
     }
 
     public function toBroadcast(object $notifiable): BroadcastMessage
     {
         return new BroadcastMessage([
             'id'      => $this->emergency->id,
-            'message' => 'The ' . $this->emergency->species . ' have ' . $this->emergency->symptoms,
+            'message' => $this->emergency->species . ' tiene ' . $this->emergency->symptoms,
             'type'    => 'emergency',
         ]);
     }
@@ -57,7 +58,7 @@ class MergeCreatedNotification extends Notification  implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new \Illuminate\Broadcasting\PrivateChannel('emergencies.admin')
+            new \Illuminate\Broadcasting\PrivateChannel('emergencies.admin.' . $this->userId),
         ];
     }
 

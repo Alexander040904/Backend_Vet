@@ -17,7 +17,7 @@ class EmergencyRequest extends Model
         'description',
     ];
 
-       
+
 
     public function activar(int $assigned_vet_id, string $status = 'accepted')
     {
@@ -35,5 +35,9 @@ class EmergencyRequest extends Model
     public function assignedVet()
     {
         return $this->belongsTo(User::class, 'assigned_vet_id');
+    }
+    public function privateChat()
+    {
+        return $this->hasOne(PrivateChat::class, 'emergency_id');
     }
 }

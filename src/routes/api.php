@@ -1,11 +1,16 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Chat\MessageController;
+use App\Http\Controllers\Chat\PrivateChatController;
 use App\Http\Controllers\Emergency_Request\EmergencyRequestController;
 use App\Http\Controllers\Notification\NotificationController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Vet\VetController;
+use App\Models\Message;
+use App\Models\PrivateChat;
 use Illuminate\Http\Request;
+use Illuminate\Routing\RouteAction;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Broadcast;
 
@@ -52,5 +57,14 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/read-all', 'markAllAsRead');
         Route::delete('/all', 'allDestroy');
         Route::delete('/{id}', 'destroy');
+    });
+
+    Route::prefix('private-chat')->controller(PrivateChatController::class)->group(function () {
+        Route::post('/', 'store');
+        Route::get('/{id}', 'getMessages');
+    });
+
+    Route::prefix('message')->controller(MessageController::class)->group(function () {
+        Route::post('/', 'store');
     });
 });
