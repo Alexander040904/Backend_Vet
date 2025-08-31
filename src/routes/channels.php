@@ -3,8 +3,8 @@
 use App\Models\PrivateChat;
 use Illuminate\Support\Facades\Broadcast;
 
-Broadcast::channel('emergencies.admin', function ($user) {
-    return $user->role_id === 1;
+Broadcast::channel('emergencies.admin.{id}', function ($user, $id) {
+    return $user->id === (int) $id && $user->role_id === 1;
 });
 Broadcast::channel('client.{id}', function ($user, $id) {
     // Solo el cliente dueño de la emergencia puede escuchar

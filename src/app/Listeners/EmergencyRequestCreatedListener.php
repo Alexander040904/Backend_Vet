@@ -25,7 +25,7 @@ class EmergencyRequestCreatedListener
         $admins = \App\Models\User::where('role_id', 1)->get();
 
         foreach ($admins as $admin) {
-            $admin->notify(new MergeCreatedNotification($event->mergencyRequest));
+            $admin->notify(new MergeCreatedNotification($event->mergencyRequest, $admin->id));
         }
     }
 }
