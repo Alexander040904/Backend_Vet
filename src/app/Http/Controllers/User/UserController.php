@@ -65,4 +65,17 @@ class UserController extends Controller
 
         return response()->json($user);
     }
+
+    public function showById(Request $request, $id)
+    {
+        try {
+            $user = User::findOrFail($id);
+            return response()->json($user);
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'message' => 'Usuario no encontrado'
+            ], 404);
+        }
+    
+    }
 }

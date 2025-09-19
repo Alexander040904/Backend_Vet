@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Prueba WebSocket Laravel Reverb</title>
+</head>
+<body>
+  <h1>Prueba WebSocket Laravel Reverb (sin Echo)</h1>
+  <pre id="log"></pre>
+
+  <script>
+    const ws = new WebSocket('ws://localhost:8080');
+
+    ws.onopen = () => {
+      document.getElementById('log').textContent += 'Conectado a Reverb\n';
+      // Suscribirse a un canal público llamado "test-channel"
+      ws.send(JSON.stringify({
+        type: 'subscribe',
+        channel: 'test-channel',
+      }));
+    };
+
+    ws.onmessage = (msg) => {
+      document.getElementById('log').textContent += 'Mensaje recibido: ' + msg.data + '\n';
+      console.log('Mensaje recibido:', msg.data);
+    };
+
+    ws.onerror = (e) => {
+      document.getElementById('log').textContent += 'Error: ' + e.message + '\n';
+    };
+
+    ws.onclose = () => {
+      document.getElementById('log').textContent += 'Conexión cerrada\n';
+    };
+  </script>
+</body>
+</html>
